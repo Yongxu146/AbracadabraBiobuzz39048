@@ -1,15 +1,20 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.CRServo;
 
 @TeleOp
+@Configurable
 public class MecanumDrive extends LinearOpMode {
 
     private CRServo servo;
+    public static double outakeVelocity;
+    private boolean outakeOn = false;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -22,7 +27,8 @@ public class MecanumDrive extends LinearOpMode {
         DcMotor FR = hardwareMap.dcMotor.get("FR");
         DcMotor BR = hardwareMap.dcMotor.get("BR");
         DcMotor intake = hardwareMap.dcMotor.get("intake");
-        DcMotor outake = hardwareMap.dcMotor.get("Outake");
+        DcMotorEx outake = hardwareMap.get(DcMotorEx.class, "Outake");
+        outake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //DcMotor servo = hardwareMap.dcMotor.get("servo");
 
         // Reverse the right side motors. This may be wrong for your setup.
@@ -55,11 +61,29 @@ public class MecanumDrive extends LinearOpMode {
 
             if(gamepad1.a){intake.setPower(100);}
             else {intake.setPower(0);}
-            if(gamepad1.x){outake.setPower(100);}
-            else {outake.setPower(0);}
+            if(gamepad1.x){servo.setPower(1.0);}
+            else {servo.setPower(0);}
+            if(gamepad1.b){servo.setPower(-100);}
 
-            if(gamepad1.left_trigger_pressed){servo.setPower(1.0);}
-            else {servo.setPower(0.0);}
+            if(gamepad1.leftBumperWasPressed()){
+                if(outakeOn){
+                    outakeOn = false;
+                }
+                else {
+                    outakeOn = true;
+                }
+            }
+
+            if(outakeOn){
+                outake.setVelocity(outakeVelocity); // 1250 shoots from edge into bucket, meant to be configured via panels
+            }
+            else {
+                outake.setVelocity(0.0);
+            }
+
+
+
+
 
             //if(gamepad1.x){frontLeftPower = 1;}
             //else {frontLeftPower = 0;}
