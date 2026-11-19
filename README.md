@@ -1,3 +1,7 @@
+# Abracdabra 39048 Github Repo
+This is the Github Repo containing all code used by FTC Team 39048 Abracadabra for the 2026-2027 Biobuzz season.
+<details>
+<summary>Preexisting README</summary>
 ## NOTICE
 
 This repository contains the public FTC SDK for the BIOBUZZ (2026-2027) competition season.
@@ -1782,5 +1786,6 @@ Changes include:
  * The API for the Legacy Module and Core Device Interface Module have been updated.
    - Support for encoders with the Legacy Module is now working.
  * The hardware loop has been updated for better performance.
-# AbracadabraBiobuzz39048
-# AbracadabraBiobuzz39048
+<details>
+
+
