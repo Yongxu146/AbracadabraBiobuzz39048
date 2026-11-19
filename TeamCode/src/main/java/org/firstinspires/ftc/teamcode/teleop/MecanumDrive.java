@@ -15,6 +15,7 @@ public class MecanumDrive extends LinearOpMode {
     private CRServo servo;
     public static double outakeVelocity;
     private boolean outakeOn = false;
+    private double directionFlip = 1;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -43,7 +44,7 @@ public class MecanumDrive extends LinearOpMode {
 
         waitForStart();
 
-        if (isStopRequested()) return;
+//        if (isStopRequested()) return;
 
         while (opModeIsActive()) {
             double y = -gamepad1.left_stick_y; // Remember, Y stick value is reversed
@@ -64,7 +65,8 @@ public class MecanumDrive extends LinearOpMode {
             if(gamepad1.x){servo.setPower(1.0);}
             else {servo.setPower(0);}
             if(gamepad1.b){servo.setPower(-100);}
-
+            if(gamepad1.dpad_left){intake.setPower(-100);}
+            gamepad1.setLedColor(255.0, 0.0, 255.0, 999999999);
             if(gamepad1.leftBumperWasPressed()){
                 if(outakeOn){
                     outakeOn = false;
@@ -74,9 +76,13 @@ public class MecanumDrive extends LinearOpMode {
                 }
             }
 
-            if(outakeOn){
-                outake.setVelocity(outakeVelocity); // 1250 shoots from edge into bucket, meant to be configured via panels
+            if(outakeOn) {
+                gamepad1.rumble(1); // 1250 shoots from edge into bucket, meant to be configured via panels
+                while (outakeOn) {
+                    outake.setVelocity(outakeVelocity);
+                }
             }
+
             else {
                 outake.setVelocity(0.0);
             }
